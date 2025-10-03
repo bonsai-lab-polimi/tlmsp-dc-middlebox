@@ -94,6 +94,16 @@ No additional commands are required
 
 #### Middlebox
 
+- Generate a self-signed certificate (run with Cloudflare GO):
+```
+go run <cfgo-src-path>/src/crypto/tls/generate_cert.go -host 127.0.0.1 -allowDC
+```
+- If the delegated credential has not been generated already (dc.cred is not in DC/certs) (run with Cloudflare GO)
+```
+go run <cfgo-src-path>/src/crypto/tls/generate_delegated_credential.go -cert-path cert.pem -key-path key.pem -signature-scheme Ed25519 -duration 168h
+```
+NOTE: Remember that the DC expires after 7 days
+
 ```
 cd ~/shared/Middlebox
 # ./compile.sh if required
@@ -103,6 +113,19 @@ cd ~/shared/Middlebox
 The terminal should then stop asking for input
 
 #### Client
+
+#### Getting an OAuth token
+- Create an OAuth application for example, from [Google Cloud](https://console.cloud.google.com/auth/clients)
+- Click "Create Client" -> Web application -> any name. As "Redirect URL" set `http://localhost/404`
+- Copy Client ID and Client Secret, and double-check the  and paste them in the right place in the file `OAuthTokenGetter/secrets.js`
+- With any web browser open the HTML page  `OAuthTokenGetter/get_code.html` and click "Get access code". Log in with your Google account
+- From the page URL, copy the parameter "code" and paste it into the "Get refresh token" text box and click the button. A token should appear 
+- Create a refresh_token.txt file in the same folder
+- Paste the "refresh_token" parameter from the access token returned by Google
+- The refresh_token.sh should always return a JSON token.
+```
+
+```
 
 ```
 cd ~/shared/Middlebox
