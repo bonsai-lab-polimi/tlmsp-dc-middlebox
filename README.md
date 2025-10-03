@@ -74,11 +74,43 @@ To run the middlebox functionality, use the following commands
 
 ### Server (all variants)
 
+OpenFaaS
 ```
 sudo kubectl port-forward --address 0.0.0.0 -n openfaas svc/gateway 8080:8080 >/dev/null 2>/dev/null &
 ```
-
 Running `curl 127.0.0.1:8080/function/init` should return no output
+
+Alternative: plain Nginx
+```
+sudo apt install nginx
+sudo systemctl start nginx
+```
+
+### DC
+
+#### Server
+
+No additional commands are required
+
+#### Middlebox
+
+```
+cd ~/shared/Middlebox
+# ./compile.sh if required
+./middlebox
+```
+
+The terminal should then stop asking for input
+
+#### Client
+
+```
+cd ~/shared/Middlebox
+# ./compile.sh if required
+```
+
+To check that everything works, `./client 'https://<middlebox-ip>:<middlebox-port>/function/init'` should have no output, then proceed
+to the Testing phase.
 
 ### TLMSP
 
@@ -105,33 +137,6 @@ The terminal should then stop asking for input
 To check that everything
 works, `curl -k --tlmsp /shared/Configurations/randomization.ucl 'https://192.168.58.1:4444/function/init'` should have no
 output, then proceed to the Testing phase.
-
-### DC
-
-#### Server
-
-No additional commands are required
-
-#### Middlebox
-
-```
-cd ~/shared/Middlebox
-# ./compile.sh if required
-./middlebox
-```
-
-The terminal should then stop asking for input
-
-#### Client
-
-```
-cd ~/shared/Middlebox
-# ./compile.sh if required
-```
-
-To check that everything works, `./client 'https://192.168.56.2:8443/function/init'` should have no output, then proceed
-to the Testing phase.
-
 ## Testing
 
 Since the automatic script tests all the methods for TLMSP and DC, it is recommended to use a bare-metal deployment with
